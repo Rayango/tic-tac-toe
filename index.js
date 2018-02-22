@@ -4,14 +4,14 @@ let board = Array(9).fill(false, 0);
 let gameState = {
   winnerFound: false,
   turnNumber: 0,
-  playerTurn: Math.floor(Math.random() * 2)
+  player: Math.floor(Math.random() * 2)
 };
 
 const promptForMove = (turnNumber) => {
   if (turnNumber === 0) {
     return readlineSync.question(`
       Welcome to tic tac toe!  To make your move, please enter the number at which you want to make your move.
-      Player ${gameState.playerTurn? '1 (o)' : '2 (x)'} goes first!
+      Player ${gameState.player? '1 (o)' : '2 (x)'} goes first!
 
       ${board[0] ? board[0] : 0}  ${board[1] ? board[1] : 1}  ${board[2] ? board[2] : 2}
       ${board[3] ? board[3] : 3}  ${board[4] ? board[4] : 4}  ${board[5] ? board[5] : 5}
@@ -19,7 +19,7 @@ const promptForMove = (turnNumber) => {
     `);
   } else {
     return readlineSync.question(`
-      Player ${gameState.playerTurn? '1 (o)' : '2 (x)'}'s turn!
+      Player ${gameState.player? '1 (o)' : '2 (x)'}'s turn!
 
       ${board[0] ? board[0] : 0}  ${board[1] ? board[1] : 1}  ${board[2] ? board[2] : 2}
       ${board[3] ? board[3] : 3}  ${board[4] ? board[4] : 4}  ${board[5] ? board[5] : 5}
@@ -34,20 +34,55 @@ const executeMove = (position, player) => {
   return;
 };
 
-const checkForWinner = (mostRecentMove) => {
-  switch(mostRecentMove) {
-    case mostRecentMove <
+const checkForWinner = (mostRecentMove, player) => {
+  let piece = player ? 'o' : 'x';
+  if (checkHorziontal(mostRecentMove, piece) || checkVertical(mostRecentMove, piece) || 
+      checkDiagonalLtB(mostRecentMove,piece) || checkDiagonalRtB(mostRecentMove, piece)) {
+    return true;
   }
+  return false;
 };
+
+const checkHorziontal = (position, piece) => {
+  if (position <= 2 && board[0] === piece && board[1] === piece && board[2] === piece) {
+    return true;
+  } else if (position <= 5 && board[3] === piece && board[4] === piece && board[5] === piece) {
+    return true;
+  } else if (position <= 8 && board[6] === piece && board[7] === piece && board[8] === piece) {
+    return true;
+  }
+  return false;
+};
+
+const checkVertical = (position, place) => {
+
+};
+
+const checkDiagonalLtB = (position, place) => {
+
+};
+
+const checkDiagonalRtB = (position, place) => {
+
+};
+
 
 while (!gameState.winnerFound) {
   let position = promptForMove(gameState.turnNumber);
   while (board[position]) {
     position = promptForMove(gameState.turnNumber);
   }
-  executeMove(position, gameState.playerTurn);
-  checkForWinner(position);
-  gameState.playerTurn = !gameState.playerTurn;
+  executeMove(position, gameState.player);
+  if (checkForWinner(position, gameState.player)) {
+    console.log('Player ' + (gameState.player? '1' : '2') + ' wins!');
+    console.log(`
+      ${board[0] ? board[0] : 0}  ${board[1] ? board[1] : 1}  ${board[2] ? board[2] : 2}
+      ${board[3] ? board[3] : 3}  ${board[4] ? board[4] : 4}  ${board[5] ? board[5] : 5}
+      ${board[6] ? board[6] : 6}  ${board[7] ? board[7] : 7}  ${board[8] ? board[8] : 8}
+    `);
+    return;
+  }
+  gameState.player = !gameState.player;
   gameState.turnNumber++;
 }  
 
