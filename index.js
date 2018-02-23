@@ -54,16 +54,27 @@ const checkHorziontal = (position, piece) => {
   return false;
 };
 
-const checkVertical = (position, place) => {
-
+const checkVertical = (position, piece) => {
+  let columnTop = position;
+  while (position > 2) {
+    columnTop -= 3;
+  }
+  if (position === 0 && board[0] === piece && board[3] === piece && board[6] === piece) {
+    return true;
+  } else if (position === 1 && board[1] === piece && board[4] === piece && board[7] === piece) {
+    return true;
+  } else if (position === 2 && board[2] === piece && board[5] === piece && board[8] === piece) {
+    return true;
+  }
+  return false;
 };
 
-const checkDiagonalLtB = (position, place) => {
-
+const checkDiagonalLtB = (position, piece) => {
+  return board[0] === piece && board[4] === piece && board[8] === piece;
 };
 
-const checkDiagonalRtB = (position, place) => {
-
+const checkDiagonalRtB = (position, piece) => {
+  return board[2] === piece && board[4] === piece && board[6] === piece;
 };
 
 
